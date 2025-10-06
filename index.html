@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Barta 24 - Round your image corners online and download in transparent PNG format instantly." />
+  <meta name="keywords" content="AI Barta 24, image corner rounder, PNG download, free image tool" />
+  <title>AI Barta 24 - Image Corner Rounder</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff00cc, #3333ff);
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    header {
+      padding: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    #ad-top, #ad-middle, #ad-bottom {
+      margin: 10px auto;
+      width: 100%;
+      max-width: 350px;
+      min-height: 50px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9em;
+      color: rgba(255,255,255,0.7);
+    }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      width: 90%;
+      max-width: 400px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+    input[type="file"] {
+      background: rgba(255,255,255,0.2);
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    img {
+      max-width: 100%;
+      border-radius: var(--radius, 0px);
+      transition: border-radius 0.2s ease;
+    }
+    .slider {
+      width: 100%;
+    }
+    button {
+      background: white;
+      color: #333;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: #ff00cc;
+      color: white;
+    }
+    footer {
+      padding: 15px;
+      font-size: 0.8em;
+      color: rgba(255,255,255,0.7);
+    }
+  </style>
+</head>
+<body>
+  <header>🧠 AI Barta 24</header>
+
+  <!-- 🔸 AD SCRIPT SECTION (TOP BANNER AD) -->
+  <div id="ad-top">Your Ad Here (Top Banner)</div>
+  <!-- You can paste your ad scripts below -->
+  <!-- <script async src="//pl24814992.revenuecpmgate.com/.../invoke.js"></script> -->
+
+  <main>
+    <h2>Round Your Image Corners</h2>
+    <input type="file" id="imageInput" accept="image/*" />
+    <img id="preview" src="" alt="Preview" style="display:none;" />
+    <label for="radius">Corner Radius:</label>
+    <input type="range" min="0" max="200" value="0" id="radius" class="slider" />
+
+    <!-- 🔸 AD SCRIPT SECTION (MIDDLE AD) -->
+    <div id="ad-middle">Your Ad Here (Middle)</div>
+
+    <button id="downloadBtn">Download PNG</button>
+  </main>
+
+  <!-- 🔸 AD SCRIPT SECTION (BOTTOM/SOCIAL BAR AD) -->
+  <div id="ad-bottom">Your Ad Here (Bottom/Social Bar)</div>
+
+  <footer>© 2025 AI Barta 24. All rights reserved.</footer>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+    const radiusSlider = document.getElementById('radius');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let originalImage = null;
+
+    imageInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          originalImage = new Image();
+          originalImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    radiusSlider.addEventListener('input', () => {
+      preview.style.setProperty('--radius', radiusSlider.value + 'px');
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      if (!originalImage) return;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const radius = parseInt(radiusSlider.value);
+      canvas.width = originalImage.width;
+      canvas.height = originalImage.height;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      roundRect(ctx, 0, 0, canvas.width, canvas.height, radius);
+      ctx.clip();
+      ctx.drawImage(originalImage, 0, 0);
+      ctx.restore();
+
+      const link = document.createElement('a');
+      link.download = 'rounded-image.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+  </script>
+</body>
+</html>
